@@ -1,0 +1,52 @@
+entity Device {
+	deviceId Integer,
+	name String,
+	date Instant
+}
+
+entity Command {
+	commandId Integer,
+    name String
+}
+
+entity Routine {
+	routineId Integer,
+    name String,
+    frequency Integer,
+    startTime Instant,
+    routineType RoutineType
+}
+
+enum RoutineType{
+	TIMEBASED, TRIGGERED
+}
+
+entity CommandResponseKeyWord{
+	keyword String
+}
+
+entity CommandHistory{
+	wasSuccess Boolean,
+    sentTime Instant,
+    responseTime Instant
+}
+
+relationship ManyToOne {
+	Command{deviceCommand} to Device
+	Command{routineCommand} to Routine
+	Routine{deviceRoutine} to Device
+	CommandResponseKeyWord{commandKeyword} to Command
+	CommandHistory{commandHistory} to Command
+}
+
+
+// Set pagination options
+paginate JobHistory, Employee with infinite-scroll
+paginate Job with pagination
+
+dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl except Employee, Job
+// Set an angular suffix
+angularSuffix * with mySuffix
